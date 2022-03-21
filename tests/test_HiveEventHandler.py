@@ -1,5 +1,7 @@
 import json
-from event_parser.hive_event_parser import parse_hive_metastore_table_event_message
+
+from atlas_kafka_event_listener.HiveEventHandler import parse_hive_metastore_create_table_event_message, \
+    create_hive_meta_entities
 
 
 def test_parse_hive_metastore_table_event_message():
@@ -53,10 +55,14 @@ def test_parse_hive_metastore_table_event_message():
     expected_cols = tmp_table["sd"]["cols"]
     expected_location = tmp_table["sd"]["location"]
 
-    db_name, table_name, owner, create_time, cols, location = parse_hive_metastore_table_event_message(test_msg)
+    db_name, table_name, owner, create_time, cols, location = parse_hive_metastore_create_table_event_message(test_msg)
     assert expected_db_name == db_name
     assert expected_table_name == table_name
     assert expected_owner == owner
     assert expected_create_time == create_time
     assert expected_cols == cols
     assert expected_location == location
+
+
+def test_create_hive_meta_entities():
+    create_hive_meta_entities()
