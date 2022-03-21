@@ -1,7 +1,7 @@
-import json
+from atlas_client.client import Atlas
 
-from atlas_kafka_event_listener.HiveEventHandler import parse_hive_metastore_create_table_event_message, \
-    create_hive_meta_entities
+from atlas_kafka_event_listener import secret
+from atlas_kafka_event_listener.HiveEventHandler import HiveEventHandler
 
 
 def test_parse_hive_metastore_table_event_message():
@@ -47,22 +47,19 @@ def test_parse_hive_metastore_table_event_message():
     "setLastAccessTime":false,"parametersSize":6,"setRetention":false,"partitionKeysIterator":[],"setTemporary":true,
     "setRewriteEnabled":false,"setOwner":true,"setViewOriginalText":false,"setViewExpandedText":false,
     "setTableType":true,"setCreationMetadata":false,"setOwnerType":true}"""
-    tmp_table = json.loads(test_msg)
-    expected_db_name = tmp_table["dbName"]
-    expected_table_name = tmp_table['tableName']
-    expected_owner = tmp_table['owner']
-    expected_create_time = tmp_table["createTime"]
-    expected_cols = tmp_table["sd"]["cols"]
-    expected_location = tmp_table["sd"]["location"]
+    local = False
+    # config for atlas client
+    atlas_prod_hostname = "https://atlas.lab.sspcloud.fr"
+    atlas_prod_port = 443
+    atlas_local_hostname = "http://localhost"
+    login = "admin"
+    pwd = "admin"
 
-    db_name, table_name, owner, create_time, cols, location = parse_hive_metastore_create_table_event_message(test_msg)
-    assert expected_db_name == db_name
-    assert expected_table_name == table_name
-    assert expected_owner == owner
-    assert expected_create_time == create_time
-    assert expected_cols == cols
-    assert expected_location == location
+    if local:
+        atlas_client = Atlas(atlas_local_hostname, port=21000, username=login, password=pwd)
+    else:
+        # create an instance of the atlas Client with oidc token
+        atlas_client = Atlas(atlas_prod_hostname, atlas_prod_port, oidc_token=secret.oidc_token)
 
-
-def test_create_hive_meta_entities():
-    create_hive_meta_entities()
+    event_handler = HiveEventHandler(atlas_client)
+    event_handler.handle_create_table_event(test_msg)
