@@ -127,3 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+atlas_kafka_event_listener/secret.py
