@@ -36,6 +36,8 @@ class KConsumer:
     def event_handler(self, event_key: str, event_value: str):
         if event_key == "create_table":
             self.hive_event_handler.handle_create_table_event(event_value)
+        elif event_key == "drop_table":
+            self.hive_event_handler.handle_drop_table_event(event_value)
         else:
             my_logger.error("Unknown event key")
 
