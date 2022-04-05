@@ -6,6 +6,11 @@ from atlas_client.entity_management.hive.HiveDBManager import HiveDBManager
 from atlas_client.entity_management.hive.HiveTableManager import HiveTableManager
 from atlas_client.entity_search.EntityFinder import EntityFinder
 
+from atlas_kafka_event_listener.LogManager import LogManager
+
+my_logger = LogManager(__name__).get_logger()
+my_logger.debug("Init HiveEventHandler")
+
 
 class HiveEventHandler:
     def __init__(self, atlas_client: Atlas):
@@ -58,4 +63,3 @@ class HiveEventHandler:
         self.hive_table_manager.delete_entity(guid)
         if purge:
             self.hive_table_manager.purge_entity(guid)
-
