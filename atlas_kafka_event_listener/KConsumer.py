@@ -3,7 +3,6 @@ from typing import List
 from atlas_client.client import Atlas
 from kafka import KafkaConsumer
 
-from atlas_kafka_event_listener import secret
 from atlas_kafka_event_listener.HiveEventHandler import HiveEventHandler
 from atlas_kafka_event_listener.LogManager import LogManager
 
@@ -38,32 +37,11 @@ class KConsumer:
             self.hive_event_handler.handle_create_table_event(event_value)
         elif event_key == "drop_table":
             self.hive_event_handler.handle_drop_table_event(event_value)
+        elif event_key == "alter_table":
+            # todo
+            pass
         else:
             my_logger.error("Unknown event key")
+            raise
 
 
-def main():
-    # create an atlas consumer instance
-    local = False
-    # config for atlas client
-    atlas_prod_hostname = "https://atlas.lab.sspcloud.fr"
-    atlas_prod_port = 443
-    atlas_local_hostname = "http://localhost"
-    login = "admin"
-    pwd = "admin"
-
-    if local:
-        atlas_client = Atlas(atlas_local_hostname, port=21000, username=login, password=pwd)
-    else:
-        # create an instance of the atlas Client with oidc token
-        atlas_client = Atlas(atlas_prod_hostname, atlas_prod_port, oidc_token=secret.oidc_token)
-    topic = "hive_meta"
-    group_id = "my-group"
-    broker_url = ['localhost:9092']
-
-    consumer = KConsumer(topic, group_id, broker_url, atlas_client=atlas_client)
-    consumer.start()
-
-
-if __name__ == "__main__":
-    main()

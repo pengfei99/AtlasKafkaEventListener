@@ -13,22 +13,22 @@ class HiveEventHandler:
         self.hive_db_manager = HiveDBManager(atlas_client)
         self.hive_table_manager = HiveTableManager(atlas_client)
         self.hive_column_manager = HiveColumnManager(atlas_client)
-        self.finder=EntityFinder(atlas_client)
+        self.finder = EntityFinder(atlas_client)
 
     def handle_create_table_event(self, event_msg: str):
         table_event_metadata = json.loads(event_msg)
-        table_name = table_event_metadata['tableName']
-        db_name = table_event_metadata['dbName']
-        owner = table_event_metadata['owner']
-        create_time = table_event_metadata["createTime"]
-        cols = table_event_metadata["sd"]["cols"]
-        data_location = table_event_metadata["sd"]["location"]
+        table_name = table_event_metadata.get('tableName')
+        db_name = table_event_metadata.get('dbName')
+        owner = table_event_metadata.get('owner')
+        create_time = table_event_metadata.get("createTime")
+        cols = table_event_metadata.get("sd").get("cols")
+        data_location = table_event_metadata.get("sd").get("location")
 
-        table_description = table_event_metadata["parameters"]["comment"]
+        table_description = table_event_metadata.get("parameters").get("comment")
 
         # step 1 create/update hive db
         # here cluster name is the name space of each user(e.g. KUBERNETES_NAMESPACE=user-pengfei)
-        cluster_name = table_event_metadata["clusterName"]
+        cluster_name = table_event_metadata.get("clusterName")
         db_description = ""
         self.hive_db_manager.create_entity(db_name, cluster_name, db_description, owner=owner)
 
@@ -40,16 +40,22 @@ class HiveEventHandler:
         # step 3 creat columns
         table_qualified_name = f"{db_qualified_name}.{table_name}"
         for col in cols:
-            col_name = col["name"]
-            col_type = col["type"]
-            col_description = col["comment"]
+            col_name = col.get("name")
+            col_type = col.get("type")
+            col_description = col.get("comment")
             self.hive_column_manager.create_entity(col_name, col_type, table_qualified_name,
                                                    col_description)
 
-    def handle_drop_table_event(self, event_msg: str):
+    def handle_drop_table_event(self, event_msg: str, purge=False):
         table_event_metadata = json.loads(event_msg)
-        table_name = table_event_metadata['tableName']
-        db_name = table_event_metadata['dbName']
-        cluster_name = table_event_metadata["clusterName"]
-        self.finder.search_full_text()
+        table_name = table_event_metadata.get('tableName')
+        db_name = table_event_metadata.get('dbName')
+        cluster_name = table_event_metadata.get("clusterName")
+        # build qualified name of the entity based on hive metadata
+        qualified_name = f"{cluster_name}@{db_name}.{table_name}"
+        # get guid of the entity that you want to delete
+        guid = self.finder.get_guid_by_qualified_name("hive_table", qualified_name)
+        self.hive_table_manager.delete_entity(guid)
+        if purge:
+            self.hive_table_manager.purge_entity(guid)
 
