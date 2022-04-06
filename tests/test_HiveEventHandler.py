@@ -1,9 +1,7 @@
-import json
-
 import pytest
 from atlas_client.client import Atlas
 
-from atlas_kafka_event_listener import secret
+import secret
 from atlas_kafka_event_listener.HiveEventHandler import HiveEventHandler
 
 
