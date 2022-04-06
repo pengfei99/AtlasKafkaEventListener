@@ -22,8 +22,8 @@ class HiveEventHandler:
 
     def handle_create_table_event(self, event_msg: str):
         table_event_metadata = json.loads(event_msg)
-        table_name = table_event_metadata.get('tableName')
-        db_name = table_event_metadata.get('dbName')
+        table_name = table_event_metadata.get('tableName').lower()
+        db_name = table_event_metadata.get('dbName').lower()
         owner = table_event_metadata.get('owner')
         create_time = table_event_metadata.get("createTime")
         cols = table_event_metadata.get("sd").get("cols")
@@ -45,7 +45,7 @@ class HiveEventHandler:
         # step 3 creat columns
         table_qualified_name = f"{db_qualified_name}.{table_name}"
         for col in cols:
-            col_name = col.get("name")
+            col_name = col.get("name").lower()
             col_type = col.get("type")
             col_description = col.get("comment")
             self.hive_column_manager.create_entity(col_name, col_type, table_qualified_name,
@@ -53,8 +53,8 @@ class HiveEventHandler:
 
     def handle_drop_table_event(self, event_msg: str, purge=False):
         table_event_metadata = json.loads(event_msg)
-        table_name = table_event_metadata.get('tableName')
-        db_name = table_event_metadata.get('dbName')
+        table_name = table_event_metadata.get('tableName').lower()
+        db_name = table_event_metadata.get('dbName').lower()
         cluster_name = table_event_metadata.get("clusterName")
         # build qualified name of the entity based on hive metadata
         qualified_name = f"{cluster_name}@{db_name}.{table_name}"
@@ -63,3 +63,4 @@ class HiveEventHandler:
         self.hive_table_manager.delete_entity(guid)
         if purge:
             self.hive_table_manager.purge_entity(guid)
+

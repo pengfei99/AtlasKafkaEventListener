@@ -21,7 +21,7 @@ class KConsumer:
         consumer = KafkaConsumer(self.topic,
                                  group_id=self.group_id,
                                  bootstrap_servers=self.broker_url,
-                                 auto_offset_reset='earliest',
+                                 auto_offset_reset='latest',
                                  enable_auto_commit=False)
         for message in consumer:
             # message value and key are raw bytes we need to deserialize it
