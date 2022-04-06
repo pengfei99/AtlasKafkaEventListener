@@ -6,7 +6,6 @@ authors = ["Pengfei Liu <liu.pengfei@hotmail.fr>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-
 kafka-python = "^2.0.2"
 atlaspyapi = "^0.2.0"
 python-snappy = "^0.6.1"
