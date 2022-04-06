@@ -59,8 +59,11 @@ class HiveEventHandler:
         # build qualified name of the entity based on hive metadata
         qualified_name = f"{cluster_name}@{db_name}.{table_name}"
         # get guid of the entity that you want to delete
-        guid = self.finder.get_guid_by_qualified_name("hive_table", qualified_name)
-        self.hive_table_manager.delete_entity(guid)
-        if purge:
-            self.hive_table_manager.purge_entity(guid)
-
+        try:
+            guid = self.finder.get_guid_by_qualified_name("hive_table", qualified_name)
+        except:
+            my_logger.exception(f"Can't find guid for given entity qualified_name {qualified_name}")
+        else:
+            self.hive_table_manager.delete_entity(guid)
+            if purge:
+                self.hive_table_manager.purge_entity(guid)
