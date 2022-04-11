@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atlas-kafka-event-listener
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: atlas-kafka-event-listener
+  template:
+    metadata:
+      labels:
+        app: atlas-kafka-event-listener
+    spec:
+      containers:
+        - name: main
+          image: liupengfei99/atlas-kafka-event-listener
+          imagePullPolicy: Always
+          env:
+            # env var for atlas server connection
+            - name: ATLAS_HOSTNAME
+              value: https://atlas.lab.sspcloud.fr
+            - name: ATLAS_PORT
+              value: '443'
+            # oidc token for atlas server authentication
+            - name: OIDC_TOKEN
+              value: ''
+            # env var for kafka cluster broker url
+            - name: KAFKA_BROKER_URL
+              value: 'kafka-0.kafka-headless:9092,kafka-1.kafka-headless:9092,kafka-2.kafka-headless:9092'
+            # env var for setting kafka consumer topic name
+            - name: KAFKA_TOPIC_NAME
+              value: 'hive-meta'
+            # env var for setting Kafka consumer group id
+            - name: CONSUMER_GROUP_ID=
+              value: 'hive_atlas_meta'
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          resources:
+            requests:
+              memory: "1024Mi"
+              cpu: "2000m"
+            limits:
+              memory: "2048Mi"
+              cpu: "4000m"
