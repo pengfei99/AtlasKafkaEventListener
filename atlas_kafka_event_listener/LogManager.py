@@ -2,9 +2,11 @@ import logging
 import sys
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
+import os
 
 
 class LogManager:
+    DEFAULT_LOG_LEVEL="DEBUG"  # better to have too much log than not enough
 
     def __init__(self, logger_name: str, enable_file_handler=False, log_propagate=False,
                  log_format="%(asctime)s — %(name)s — %(levelname)s — %(message)s",
@@ -28,7 +30,7 @@ class LogManager:
 
     def get_logger(self):
         logger = logging.getLogger(self.logger_name)
-        logger.setLevel(logging.DEBUG)  # better to have too much log than not enough
+        logger.setLevel(os.environ.get("LOGLEVEL", DEFAULT_LOG_LEVEL)) 
         logger.addHandler(self.get_console_handler())
         if self.enable_file_handler:
             logger.addHandler(self.get_file_handler())
