@@ -6,9 +6,9 @@ import os
 
 
 class LogManager:
-    DEFAULT_LOG_LEVEL="DEBUG"  # better to have too much log than not enough
+    DEFAULT_LOG_LEVEL = "DEBUG"  # better to have too much log than not enough
 
-    def __init__(self, logger_name: str, enable_file_handler=False, log_propagate=False,
+    def __init__(self, logger_name: str, enable_file_handler=False, log_propagate = False,
                  log_format="%(asctime)s — %(name)s — %(levelname)s — %(message)s",
                  log_file_path="~/atlas_client_log"):
         self.logger_name = logger_name
