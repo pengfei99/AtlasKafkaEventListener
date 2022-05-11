@@ -16,6 +16,8 @@ spec:
         - name: main
           image: liupengfei99/atlas-kafka-event-listener
           imagePullPolicy: Always
+          command: [sh, -c]
+          args: ["python /app/atlas_kafka_event_listener/main.py $ATLAS_HOSTNAME $ATLAS_PORT $OIDC_TOKEN $KAFKA_BROKER_URL $KAFKA_TOPIC_NAME $CONSUMER_GROUP_ID"]
           env:
             # env var for atlas server connection
             - name: ATLAS_HOSTNAME
@@ -24,7 +26,7 @@ spec:
               value: '443'
             # oidc token for atlas server authentication
             - name: OIDC_TOKEN
-              value: ''
+              value: 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhUHNCSzhYRC1od1gtMWJFbjdZZDRLS0tWS0hYRy03RHg3STZDaVZZWUtRIn0.eyJleHAiOjE2NTI4NzQxOTgsImlhdCI6MTY1MjI2OTQwMCwiYXV0aF90aW1lIjoxNjUyMjY5Mzk4LCJqdGkiOiIxNzJkYTEzZi0wMTE4LTQ0NjYtYTkzZC05YmQ0OTI4ODM5YmMiLCJpc3MiOiJodHRwczovL2F1dGgubGFiLnNzcGNsb3VkLmZyL2F1dGgvcmVhbG1zL3NzcGNsb3VkIiwiYXVkIjpbIm1pbmlvLWRhdGFub2RlIiwib255eGlhIiwiYWNjb3VudCJdLCJzdWIiOiI0NzM0OTEyOC00YTRjLTQyMjYtYTViMS02ODA4MDFhZjVhMmIiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJvbnl4aWEiLCJub25jZSI6IjhlZTBiY…ybmFtZSI6InBlbmdmZWkiLCJnaXZlbl9uYW1lIjoiUGVuZ2ZlaSIsImxvY2FsZSI6ImZyIiwiZmFtaWx5X25hbWUiOiJMaXUiLCJlbWFpbCI6ImxpdS5wZW5nZmVpQGhvdG1haWwuZnIiLCJwb2xpY3kiOiJzdHNvbmx5In0.LgiI-05MNhrpcbSGtHrzOXpfv20vLS26x5IKoiVMXturGWQIXMJqbBXPJX0jYg56jooL5aESWA2_DkcGyUQcWmAEXBjzxeqr2kH1jyPWEDg2h4oK7ThupEndQh0U5gEW06wDdANzVV7dmstLbHp8qKUaLGzUYFRl0Fot2U8LP6jSn8wFYesu-19xyFJIN5r_pBm1l70E234ZAMfzLdFN-2-6jZi5oV-JFP-GwP4QqGWcSTdcHtrywY7ZrVp-wyJGVQXTtoqTxjBt_baETk7-MNnT9rM4lMdPvTavvcX_y0-0S5o22DKra0GmtWunhTXW5efCioZOGXVebCQ-T7ldrA'
             # env var for kafka cluster broker url
             - name: KAFKA_BROKER_URL
               value: 'kafka-0.kafka-headless:9092,kafka-1.kafka-headless:9092,kafka-2.kafka-headless:9092'
