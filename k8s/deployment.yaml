@@ -32,7 +32,7 @@ spec:
             - name: KAFKA_TOPIC_NAME
               value: 'hive-meta'
             # env var for setting Kafka consumer group id
-            - name: CONSUMER_GROUP_ID=
+            - name: CONSUMER_GROUP_ID
               value: 'hive_atlas_meta'
             - name: LOGLEVEL
               value: 'INFO'
