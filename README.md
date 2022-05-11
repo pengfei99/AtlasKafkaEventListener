@@ -4,7 +4,23 @@
 
 ### Install it from source
 
-Setup env var,
+#### Step 1. Clone the project source
+
+```shell
+git clone https://github.com/pengfei99/AtlasKafkaEventListener.git
+
+```
+
+#### Step 2. Install the project dependencies
+```shell 
+cd AtlasKafkaEventListener
+pip install -r requirements.txt 
+```
+
+#### Step 3. Setup env var,
+
+Note if log level is not defined, it will use DEBUG as default log level
+
 ```shell
 export ATLAS_HOSTNAME=https://atlas.lab.sspcloud.fr
 export ATLAS_PORT=443
@@ -12,9 +28,18 @@ export OIDC_TOKEN=
 export KAFKA_BROKER_URL=hadoop1.insee.fr:9092,hadoop2.insee.fr:9092,hadoop3.insee.fr:9092
 export KAFKA_TOPIC_NAME=hive-meta
 export CONSUMER_GROUP_ID=hive_atlas_meta
+export LOGLEVEL=INFO
 export PYTHONPATH="${PYTHONPATH}:/path/to/AtlasKafkaEventListener"
 ```
-# configure python path
+
+There is a config file with prefill values, you can just edit it with appropriate values and source it
+
+```shell
+vim AtlasKafkaEventListener/command/set_env.sh
+source AtlasKafkaEventListener/command/set_env.sh
+```
+
+##### configure python path
 
 ```shell
 # You need to include path of code source in the python path 
@@ -23,9 +48,16 @@ export PYTHONPATH="${PYTHONPATH}:/path/to/AtlasKafkaEventListener"
 # example
 export PYTHONPATH="${PYTHONPATH}:/home/jovyan/work/AtlasKafkaEventListener"
 ```
+#### Step 4. Run the app
+
+There is a lanch script under command folder
+
+```shell
+cd AtlasKafkaEventListener/command
+sh run.sh
+```
 
 ### Install via k8s/docker
-
 
 
 # hive commands
