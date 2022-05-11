@@ -32,14 +32,9 @@ export LOGLEVEL=INFO
 export PYTHONPATH="${PYTHONPATH}:/path/to/AtlasKafkaEventListener"
 ```
 
-There is a config file with prefill values, you can just edit it with appropriate values and source it
 
-```shell
-vim AtlasKafkaEventListener/command/set_env.sh
-source AtlasKafkaEventListener/command/set_env.sh
-```
-
-##### configure python path
+##### You must configure python path
+Without the python path configuration, the app will not work. 
 
 ```shell
 # You need to include path of code source in the python path 
@@ -47,6 +42,14 @@ export PYTHONPATH="${PYTHONPATH}:/path/to/AtlasKafkaEventListener"
 
 # example
 export PYTHONPATH="${PYTHONPATH}:/home/jovyan/work/AtlasKafkaEventListener"
+```
+
+
+There is a config file with prefill values, you can just edit it with appropriate values and source it
+
+```shell
+vim AtlasKafkaEventListener/command/set_env.sh
+source AtlasKafkaEventListener/command/set_env.sh
 ```
 #### Step 4. Run the app
 
