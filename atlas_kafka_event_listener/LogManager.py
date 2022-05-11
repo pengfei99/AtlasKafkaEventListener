@@ -30,7 +30,7 @@ class LogManager:
 
     def get_logger(self):
         logger = logging.getLogger(self.logger_name)
-        logger.setLevel(os.environ.get("LOGLEVEL", DEFAULT_LOG_LEVEL)) 
+        logger.setLevel(os.environ.get("LOGLEVEL", LogManager.DEFAULT_LOG_LEVEL)) 
         logger.addHandler(self.get_console_handler())
         if self.enable_file_handler:
             logger.addHandler(self.get_file_handler())
