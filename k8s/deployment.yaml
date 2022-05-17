@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atlas-kafka-event-listener
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: atlas-kafka-event-listener
+  template:
+    metadata:
+      labels:
+        app: atlas-kafka-event-listener
+    spec:
+      containers:
+        - name: main
+          image: liupengfei99/atlas-kafka-event-listener
+          imagePullPolicy: Always
+          command: [sh, -c]
+          args: ["python /app/atlas_kafka_event_listener/main.py $ATLAS_HOSTNAME $ATLAS_PORT $OIDC_TOKEN $KAFKA_BROKER_URL $KAFKA_TOPIC_NAME $CONSUMER_GROUP_ID"]
+          env:
+            # env var for atlas server connection
+            - name: ATLAS_HOSTNAME
+              value: https://atlas.lab.sspcloud.fr
+            - name: ATLAS_PORT
+              value: '443'
+            # oidc token for atlas server authentication
+            - name: OIDC_TOKEN
+              value: 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhUHNCSzhYRC1od1gtMWJFbjdZZDRLS0tWS0hYRy03RHg3STZDaVZZWUtRIn0.eyJleHAiOjE2NTI4NzQxOTgsImlhdCI6MTY1MjI2OTQwMCwiYXV0aF90aW1lIjoxNjUyMjY5Mzk4LCJqdGkiOiIxNzJkYTEzZi0wMTE4LTQ0NjYtYTkzZC05YmQ0OTI4ODM5YmMiLCJpc3MiOiJodHRwczovL2F1dGgubGFiLnNzcGNsb3VkLmZyL2F1dGgvcmVhbG1zL3NzcGNsb3VkIiwiYXVkIjpbIm1pbmlvLWRhdGFub2RlIiwib255eGlhIiwiYWNjb3VudCJdLCJzdWIiOiI0NzM0OTEyOC00YTRjLTQyMjYtYTViMS02ODA4MDFhZjVhMmIiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJvbnl4aWEiLCJub25jZSI6IjhlZTBiY…ybmFtZSI6InBlbmdmZWkiLCJnaXZlbl9uYW1lIjoiUGVuZ2ZlaSIsImxvY2FsZSI6ImZyIiwiZmFtaWx5X25hbWUiOiJMaXUiLCJlbWFpbCI6ImxpdS5wZW5nZmVpQGhvdG1haWwuZnIiLCJwb2xpY3kiOiJzdHNvbmx5In0.LgiI-05MNhrpcbSGtHrzOXpfv20vLS26x5IKoiVMXturGWQIXMJqbBXPJX0jYg56jooL5aESWA2_DkcGyUQcWmAEXBjzxeqr2kH1jyPWEDg2h4oK7ThupEndQh0U5gEW06wDdANzVV7dmstLbHp8qKUaLGzUYFRl0Fot2U8LP6jSn8wFYesu-19xyFJIN5r_pBm1l70E234ZAMfzLdFN-2-6jZi5oV-JFP-GwP4QqGWcSTdcHtrywY7ZrVp-wyJGVQXTtoqTxjBt_baETk7-MNnT9rM4lMdPvTavvcX_y0-0S5o22DKra0GmtWunhTXW5efCioZOGXVebCQ-T7ldrA'
+            # env var for kafka cluster broker url
+            - name: KAFKA_BROKER_URL
+              value: 'kafka-0.kafka-headless:9092,kafka-1.kafka-headless:9092,kafka-2.kafka-headless:9092'
+            # env var for setting kafka consumer topic name
+            - name: KAFKA_TOPIC_NAME
+              value: 'hive-meta'
+            # env var for setting Kafka consumer group id
+            - name: CONSUMER_GROUP_ID
+              value: 'hive_atlas_meta'
+            - name: LOGLEVEL
+              value: 'INFO'
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          resources:
+            requests:
+              memory: "1024Mi"
+              cpu: "2000m"
+            limits:
+              memory: "2048Mi"
+              cpu: "4000m"
