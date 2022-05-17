@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 secret.py
 .idea
+tests/creds.py
+tests/test_OidcClient_ssp.py
