@@ -59,7 +59,7 @@ def test_parse_create_table_event_message():
 
 
 def test_parse_drop_table_event_message():
-    test_msg = """{"tableName":"toto","dbName":"default","owner":"pliu","createTime":1649169136,"lastAccessTime":0,
+    test_msg = """{"tableName":"TesT","dbName":"default","owner":"pliu","createTime":1649169136,"lastAccessTime":0,
     "retention":0,"sd":{"cols":[{"name":"student_id","type":"int"},{"name":"firstname","type":"string"},
     {"name":"lastname","type":"string"},{"name":"year","type":"string"},{"name":"major","type":"string"}],
     "location":"file:/home/pliu/hive_data/sample_data","inputFormat":"org.apache.hadoop.mapred.TextInputFormat",
@@ -85,5 +85,4 @@ def test_parse_drop_table_event_message():
         # create an instance of the atlas Client with oidc token
         atlas_client = Atlas(atlas_prod_hostname, atlas_prod_port, oidc_token=secret.oidc_token)
     event_handler = HiveEventHandler(atlas_client)
-    event_handler.handle_drop_table_event(test_msg,purge=True)
-
+    event_handler.handle_drop_table_event(test_msg, purge=True)
