@@ -1,6 +1,5 @@
 from typing import List
 
-from atlas_client.client import Atlas
 from kafka import KafkaConsumer
 
 from atlas_kafka_event_listener.HiveEventHandler import HiveEventHandler
@@ -11,11 +10,12 @@ my_logger.debug("Init kafka consumer")
 
 
 class KConsumer:
-    def __init__(self, topic: str, group_id: str, broker_url: List[str], atlas_client: Atlas):
+    def __init__(self, topic: str, group_id: str, broker_url: List[str], atlas_hostname: str, atlas_port: int,
+                 oidc_token_manager):
         self.topic = topic
         self.group_id = group_id
         self.broker_url = broker_url
-        self.hive_event_handler = HiveEventHandler(atlas_client)
+        self.hive_event_handler = HiveEventHandler(atlas_hostname, atlas_port, oidc_token_manager)
 
     def start(self):
         consumer = KafkaConsumer(self.topic,
@@ -43,5 +43,3 @@ class KConsumer:
         else:
             my_logger.error("Unknown event key")
             raise
-
-
