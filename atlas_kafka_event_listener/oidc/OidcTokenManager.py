@@ -1,8 +1,8 @@
 import logging
 import sys
 
-from src.JwtTokenValidator import JwtTokenValidator
-from src.OidcClient import OidcClient
+from atlas_kafka_event_listener.oidc.JwtTokenValidator import JwtTokenValidator
+from atlas_kafka_event_listener.oidc.OidcClient import OidcClient
 
 my_logger = logging.getLogger(__name__)
 

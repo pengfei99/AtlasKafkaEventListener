@@ -37,6 +37,7 @@ class JwtTokenValidator:
     def get_token_payload(self, input_token: str, custom_secret: str = None) -> dict:
         """
         Standard way to get the jwt token payload, With verification of signature and expiration time
+        :param custom_secret:
         :param input_token: the input token that we want to analyze
         :return:
         """
