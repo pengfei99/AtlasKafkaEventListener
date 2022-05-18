@@ -21,13 +21,27 @@ pip install -r requirements.txt
 
 Note if log level is not defined, it will use DEBUG as default log level
 
+Since version 0.0.3, the AtlasKafkaEventListener connect to a keycloak client with a service account to generate and 
+renew oidc token. This token allows the AtlasKafkaEventListener to call the Rest api of Atlas.
+
+As a result, you need to set up the following configuration
+
 ```shell
+# Atlas config
 export ATLAS_HOSTNAME=https://atlas.lab.sspcloud.fr
 export ATLAS_PORT=443
-export OIDC_TOKEN=
-export KAFKA_BROKER_URL=hadoop1.insee.fr:9092,hadoop2.insee.fr:9092,hadoop3.insee.fr:9092
+
+# Kafka config
+export KAFKA_BROKER_URL=kafka-0.kafka-headless:9092,kafka-1.kafka-headless:9092,kafka-2.kafka-headless:9092
 export KAFKA_TOPIC_NAME=hive-meta
 export CONSUMER_GROUP_ID=hive_atlas_meta
+
+# keycloak config
+export KC_URL=https://auth.lab.sspcloud.fr/auth
+export REALM_NAME=sspcloud
+export CLIENT_ID=atlas-sa
+export CLIENT_SECRET=
+
 export LOGLEVEL=INFO
 export PYTHONPATH="${PYTHONPATH}:/path/to/AtlasKafkaEventListener"
 ```
