@@ -42,7 +42,16 @@ class HiveEventHandler:
         cols = table_event_metadata.get("sd").get("cols")
         data_location = table_event_metadata.get("sd").get("location")
 
-        table_description = table_event_metadata.get("parameters").get("comment")
+        table_comment = table_event_metadata.get("parameters").get("comment")
+        table_description_dict = {'location': data_location}
+        if table_comment:
+            table_description_dict['comment'] = table_comment
+        # convert table description dictionary to json string
+        # note this json string must be a valide json value. Because it will be used as a json value
+        # so we need to protect the " with \.
+        # for example :
+        table_description = json.dumps(json.dumps(table_description_dict))[1::][:-1:]
+
         try:
             # step 1 create/update hive db
             # here cluster name is the name space of each user(e.g. KUBERNETES_NAMESPACE=user-pengfei)
@@ -50,19 +59,24 @@ class HiveEventHandler:
             db_description = ""
             self.__hive_db_manager.create_entity(db_name, cluster_name, db_description, owner=owner)
         except Exception as e:
-            my_logger.exception(f"Can't create hive database with name: {db_name}")
+            my_logger.exception(f"Can't create hive database with name: {db_name}\n {e}")
             return False
+
+        # step 2 create/update table
+        db_qualified_name = f"{cluster_name}@{db_name}"
         try:
-            # step 2 create/update table
-            db_qualified_name = f"{cluster_name}@{db_name}"
+
             self.__hive_table_manager.create_entity(table_name, db_qualified_name, table_description, owner=owner,
                                                     create_time=create_time)
         except Exception as e:
-            my_logger.exception(f"Can't create hive table with name: {table_name} in database {db_qualified_name}")
+            my_logger.exception(
+                f"Can't create hive table with name: {table_name} in database {db_qualified_name}.\n{e}")
             return False
+
+        # step 3 creat columns
+        table_qualified_name = f"{db_qualified_name}.{table_name}"
         try:
-            # step 3 creat columns
-            table_qualified_name = f"{db_qualified_name}.{table_name}"
+
             for col in cols:
                 col_name = col.get("name").lower()
                 col_type = col.get("type")
@@ -70,7 +84,8 @@ class HiveEventHandler:
                 self.__hive_column_manager.create_entity(col_name, col_type, table_qualified_name,
                                                          col_description)
         except Exception as e:
-            my_logger.exception(f"Can't create hive column with name: {db_name} in hive table {table_qualified_name}")
+            my_logger.exception(
+                f"Can't create hive column with name: {db_name} in hive table {table_qualified_name}\n{e}")
             return False
         return True
 
@@ -94,7 +109,7 @@ class HiveEventHandler:
         try:
             guid = self.__finder.get_guid_by_qualified_name("hive_table", qualified_name)
         except Exception as e:
-            my_logger.exception(f"Can't find guid for given entity qualified_name {qualified_name}")
+            my_logger.exception(f"Can't find guid for given entity qualified_name {qualified_name} \n{e}")
             return False
         else:
             self.__hive_table_manager.delete_entity(guid)
