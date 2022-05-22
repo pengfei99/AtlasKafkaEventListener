@@ -41,12 +41,12 @@ spec:
             - name: CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: keycloak-client-creds
+                  name: keycloak-client-cred
                   key: clientId
             - name: CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: keycloak-client-creds
+                  name: keycloak-client-cred
                   key: clientSecret
             - name: LOGLEVEL
               value: 'INFO'
