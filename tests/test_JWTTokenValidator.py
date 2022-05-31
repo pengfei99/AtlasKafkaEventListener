@@ -3,8 +3,8 @@ import time
 
 import pytest
 
-from creds import ssp_token
 from atlas_kafka_event_listener.oidc.JwtTokenValidator import JwtTokenValidator
+from creds import ssp_token
 
 
 @pytest.fixture

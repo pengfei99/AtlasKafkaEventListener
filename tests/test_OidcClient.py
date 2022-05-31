@@ -6,7 +6,7 @@ from atlas_kafka_event_listener.oidc.OidcClient import OidcClient
 @pytest.fixture
 def oidc_client():
     #  for keycloak version< 17.0 the url should be
-    legacy_keycloak_url= "http://localhost:8080/auth"
+    legacy_keycloak_url = "http://localhost:8080/auth"
     #  for keycloak version >=17.0, the url should be
     keycloak_url = "http://localhost:8080"
     realm_name = "pengfei-test"
