@@ -8,9 +8,14 @@ from pathlib import Path
 class LogManager:
     DEFAULT_LOG_LEVEL = "DEBUG"  # better to have too much log than not enough
 
-    def __init__(self, logger_name: str, enable_file_handler=False, log_propagate=False,
-                 log_format="%(asctime)s — %(name)s — %(levelname)s — %(message)s",
-                 log_file_path="~/atlas_client_log"):
+    def __init__(
+        self,
+        logger_name: str,
+        enable_file_handler=False,
+        log_propagate=False,
+        log_format="%(asctime)s — %(name)s — %(levelname)s — %(message)s",
+        log_file_path="~/atlas_client_log",
+    ):
         self.logger_name = logger_name
         self.__enable_file_handler = enable_file_handler
         self.__log_propagate = log_propagate
@@ -24,7 +29,9 @@ class LogManager:
 
     def get_file_handler(self):
         Path(self.__log_file_path).mkdir(parents=True, exist_ok=True)
-        file_handler = TimedRotatingFileHandler(f"{self.__log_file_path}/app.log", when='midnight')
+        file_handler = TimedRotatingFileHandler(
+            f"{self.__log_file_path}/app.log", when="midnight"
+        )
         file_handler.setFormatter(self.__formatter)
         return file_handler
 

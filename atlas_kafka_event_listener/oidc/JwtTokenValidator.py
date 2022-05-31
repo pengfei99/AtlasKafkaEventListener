@@ -21,15 +21,18 @@ class JwtTokenValidator:
         self.__pub_key = self.get_pub_key(pub_key_path)
 
     @staticmethod
-    def get_pub_key(pub_key_path: str) -> Union[
-        EllipticCurvePublicKey, RSAPublicKey, DSAPublicKey, Ed25519PublicKey, None]:
+    def get_pub_key(
+        pub_key_path: str,
+    ) -> Union[
+        EllipticCurvePublicKey, RSAPublicKey, DSAPublicKey, Ed25519PublicKey, None
+    ]:
         """
         This method takes a local path of a public key file and return it in serialized public key object
         :param pub_key_path: local path of the public key file
         :return:
         """
         if pub_key_path:
-            public_key = open(pub_key_path, 'r').read()
+            public_key = open(pub_key_path, "r").read()
             return serialization.load_ssh_public_key(public_key.encode())
         else:
             return None
@@ -51,13 +54,14 @@ class JwtTokenValidator:
             payload = jwt.decode(
                 input_token,
                 key=secret,
-                algorithms=[header['alg'], ],
-                options={"verify_exp": False
-                         }
+                algorithms=[
+                    header["alg"],
+                ],
+                options={"verify_exp": False},
             )
             my_logger.debug(f"Read token payload: {payload}")
         except ExpiredSignatureError as error:
-            my_logger.error(f'Unable to decode the token, error: {error}')
+            my_logger.error(f"Unable to decode the token, error: {error}")
         return payload
 
     @staticmethod
@@ -67,11 +71,9 @@ class JwtTokenValidator:
         :param input_token: the input token that we want to analyze
         :return:
         """
-        payload = jwt.decode(input_token,
-                             options={"verify_signature": False,
-                                      "verify_exp": False
-                                      }
-                             )
+        payload = jwt.decode(
+            input_token, options={"verify_signature": False, "verify_exp": False}
+        )
         my_logger.debug(f"Read token payload: {payload}")
         return payload
 
@@ -82,14 +84,14 @@ class JwtTokenValidator:
         :param input_token: the input token that we want to analyze
         :return:
         """
-        payload = jwt.decode(input_token,
-                             options={"verify_signature": False,
-                                      "verify_exp": False
-                                      }
-                             )
+        payload = jwt.decode(
+            input_token, options={"verify_signature": False, "verify_exp": False}
+        )
         # token_expiration has int type
         token_expiration = payload["exp"]
-        utc_time = datetime.utcfromtimestamp(token_expiration).strftime('%Y-%m-%d %H:%M:%S')
+        utc_time = datetime.utcfromtimestamp(token_expiration).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
         print(f"Token expiration time in unix ts: {token_expiration}")
         print(f"Token expiration time in UTC format: {utc_time}")
 

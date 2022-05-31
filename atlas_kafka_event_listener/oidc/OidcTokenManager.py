@@ -8,8 +8,15 @@ my_logger = logging.getLogger(__name__)
 
 
 class OidcTokenManager:
-    def __init__(self, keycloak_server_url: str, realm_name: str, client_id: str, client_secret: str,
-                 enable_service_account: bool = True, **kwargs):
+    def __init__(
+        self,
+        keycloak_server_url: str,
+        realm_name: str,
+        client_id: str,
+        client_secret: str,
+        enable_service_account: bool = True,
+        **kwargs
+    ):
         self.__url = keycloak_server_url
         self.__realm_name = realm_name
         self.__client_id = client_id
@@ -20,10 +27,16 @@ class OidcTokenManager:
                 self.__user_name = kwargs["user_name"]
                 self.__user_secret = kwargs["user_secret"]
             except KeyError:
-                my_logger.error("user name and secret must be provided, if you choose to use a user account")
+                my_logger.error(
+                    "user name and secret must be provided, if you choose to use a user account"
+                )
                 sys.exit(1)
-        self.__oidc_client = OidcClient(keycloak_server_url=keycloak_server_url, realm_name=realm_name,
-                                        client_id=client_id, client_secret=client_secret)
+        self.__oidc_client = OidcClient(
+            keycloak_server_url=keycloak_server_url,
+            realm_name=realm_name,
+            client_id=client_id,
+            client_secret=client_secret,
+        )
         self.oidc_token = self.generate_oidc_token()
         self.__jwt_token_validator = JwtTokenValidator()
 
@@ -35,7 +48,9 @@ class OidcTokenManager:
         if self.__enable_sa:
             return self.__oidc_client.get_service_account_token()
         else:
-            return self.__oidc_client.get_user_token(self.__user_name, self.__user_secret)
+            return self.__oidc_client.get_user_token(
+                self.__user_name, self.__user_secret
+            )
 
     def get_current_access_token(self) -> str:
         """

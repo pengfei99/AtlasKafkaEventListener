@@ -11,9 +11,9 @@ my_logger.debug("Init atlas kafka event listener")
 def main():
     if len(sys.argv) != 10:
         my_logger.error(
-            'Number of arguments that you give is wrong, please enter the following parameter in order.'
-            '<atlas_hostname> <atlas_port> <kafka_broker_urls> <kafka_topic> <consumer_group_id>'
-            '<keycloak_server_url> <realm_name> <client_id> <client_secret>'
+            "Number of arguments that you give is wrong, please enter the following parameter in order."
+            "<atlas_hostname> <atlas_port> <kafka_broker_urls> <kafka_topic> <consumer_group_id>"
+            "<keycloak_server_url> <realm_name> <client_id> <client_secret>"
         )
         exit(1)
     else:
@@ -30,11 +30,19 @@ def main():
         client_secret = sys.argv[9]
 
     # create an instance of the OidcTokenManager
-    oidc_token_manager = OidcTokenManager(keycloak_url, realm_name, client_id, client_secret)
+    oidc_token_manager = OidcTokenManager(
+        keycloak_url, realm_name, client_id, client_secret
+    )
 
     broker_url_list = kafka_broker_urls.replace(" ", "").split(",")
-    consumer = KConsumer(kafka_topic, consumer_group_id, broker_url_list, atlas_hostname=atlas_hostname,
-                         atlas_port=int(atlas_port), oidc_token_manager=oidc_token_manager)
+    consumer = KConsumer(
+        kafka_topic,
+        consumer_group_id,
+        broker_url_list,
+        atlas_hostname=atlas_hostname,
+        atlas_port=int(atlas_port),
+        oidc_token_manager=oidc_token_manager,
+    )
     consumer.start()
 
 
