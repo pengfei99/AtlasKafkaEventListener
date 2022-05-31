@@ -39,9 +39,15 @@ spec:
             - name: REALM_NAME
               value: 'sspcloud'
             - name: CLIENT_ID
-              value: 'atlas-sa'
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-client-cred
+                  key: clientId
             - name: CLIENT_SECRET
-              value: 'changeMe'
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-client-cred
+                  key: clientSecret
             - name: LOGLEVEL
               value: 'INFO'
           ports:
