@@ -7,7 +7,7 @@ authors = ["Pengfei Liu <liu.pengfei@hotmail.fr>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 kafka-python = "^2.0.2"
-atlaspyapi = "^0.2.3"
+atlaspyapi = "^0.2.6"
 python-snappy = "^0.6.1"
 python-keycloak = "^0.27.0"
 PyJWT = {extras = ["crypto"], version = "^2.4.0"}

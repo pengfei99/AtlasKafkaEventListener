@@ -25,7 +25,7 @@ def event_handler():
 
 
 def test_parse_create_table_event_message(event_handler):
-    test_msg = """{"tableName":"toto","dbName":"default","owner":"pliu","createTime":1649170513,"lastAccessTime":0,
+    test_msg = """{"tableName":"test1","dbName":"default","owner":"pliu","createTime":1649170513,"lastAccessTime":0,
                   "retention":0,"sd":{"cols":[{"name":"student_id","type":"int"},{"name":"firstname","type":"string"},
                   {"name":"lastname","type":"string"},{"name":"year","type":"string"},{"name":"major","type":"string"}],
                   "location":"s3a://pengfei/diffusion/hive_data/sample_data","inputFormat":"org.apache.hadoop.mapred.TextInputFormat",
@@ -46,7 +46,7 @@ def test_parse_create_table_event_message(event_handler):
 
 
 def test_parse_drop_table_event_message(event_handler):
-    test_msg = """{"tableName":"TesT","dbName":"default","owner":"pliu","createTime":1649169136,"lastAccessTime":0,
+    test_msg = """{"tableName":"test1","dbName":"default","owner":"pliu","createTime":1649169136,"lastAccessTime":0,
     "retention":0,"sd":{"cols":[{"name":"student_id","type":"int"},{"name":"firstname","type":"string"},
     {"name":"lastname","type":"string"},{"name":"year","type":"string"},{"name":"major","type":"string"}],
     "location":"file:/home/pliu/hive_data/sample_data","inputFormat":"org.apache.hadoop.mapred.TextInputFormat",
