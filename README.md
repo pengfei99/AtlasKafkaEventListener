@@ -1,8 +1,8 @@
 # AtlasKafkaEventListener
 
-## Installation
+## 1. Installation
 
-### Install it from source
+### 1.1 Install it from source
 
 #### Step 1. Clone the project source
 
@@ -74,8 +74,11 @@ cd AtlasKafkaEventListener/command
 sh run.sh
 ```
 
-### Install via k8s/docker
+### 1.2 Install via k8s/docker
 
+```shell
+kubeclt apply -f k8s/.
+```
 
 # hive commands
 
