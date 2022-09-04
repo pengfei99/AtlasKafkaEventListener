@@ -80,7 +80,9 @@ class HiveEventHandler:
                 db_qualified_name,
                 table_description,
                 owner=owner,
-                create_time=create_time,
+                # Atlas use unix epoch time stamp (in milliseconds) to store all time related fields
+                # hive use unix time stamp (in seconds). so we need to convert second to millisecond
+                create_time=create_time*1000,
             )
         except Exception as e:
             my_logger.exception(
